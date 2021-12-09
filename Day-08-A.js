@@ -1,0 +1,1 @@
+document.body.innerText.trim().split('\n').map(line => line.match(/\w+/g).slice(10)).flat().filter(l => [2, 3, 4, 7].includes(l.length)).length
