@@ -99,6 +99,43 @@ function search(sum, input, i = input.length - 1) {
 search(150, input.sort((a, b) => b - a))
 
 
+// Weighted path finding; Breadth-first flood-fill
+let map = input.map(row => row.map(() => Infinity))
+let queue = [[0, 0]] // Start at (0, 0)
+function set(x, y, prev) {
+	if (input[y]?.[x] + prev < map[y]?.[x]) {
+		queue.push([x, y])
+		map[y][x] = prev + input[y][x]
+	}
+}
+while (queue.length) {
+	let [x, y] = queue.shift()
+	let c = map[y][x]
+	set(x + 1, y, c)
+	set(x - 1, y, c)
+	set(x, y + 1, c)
+	set(x, y - 1, c)
+}
+// Follow the path and render it.
+let original = input.map(row => row.slice())
+let y = input.length - 1
+let x = input[y].length -1
+while (map[y][x] > 0) {
+	input[y][x] = 0
+	let ny = map[y - 1]?.[x] ?? Infinity
+	let py = map[y + 1]?.[x] ?? Infinity
+	let nx = map[y][x - 1] ?? Infinity
+	let px = map[y][x + 1] ?? Infinity
+	let min = Math.min(ny, py, nx, px)
+	if (ny === min) y--
+	else if (py === min) y++
+	else if (nx === min) x--
+	else x++
+}
+document.getElementsByTagName("pre")[0].innerHTML = '<span style="color: lightgray">' + input.map((row, y) => row.map((n, x) => n ? n : `<span style="color: black">${original[y][x]}</span>`).join("")).join("\n") + '</span>'
+
+
+// Part B of the 2015 thing I was working on before.
 let input = document.body.innerText.trim().split('\n')
 let str = input.pop()
 input.pop()

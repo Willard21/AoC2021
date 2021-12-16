@@ -1,6 +1,5 @@
 let input = document.body.innerText.trim().split('\n').map(row => row.split("").map(n => +n))
-let map = input.map(row => row.map(n => Infinity))
-input[0][0] = 0
+let map = input.map(row => row.map(() => Infinity))
 map[0][0] = 0
 
 let queue = [[0, 0]]
